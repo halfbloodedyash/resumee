@@ -17,7 +17,7 @@ const posts = [
   },
   {
     title: 'AI-Powered Resume Tailoring Explained',
-    excerpt: 'A deep dive into how Resume Matcher uses AI to customize your resume for each role.',
+    excerpt: 'A deep dive into how Resume Enhancer uses AI to customize your resume for each role.',
     date: 'Coming Soon',
     tag: 'Product',
   },

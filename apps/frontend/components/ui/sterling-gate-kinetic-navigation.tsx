@@ -275,7 +275,7 @@ export function SterlingGateKineticNavigation({ inline = false }: { inline?: boo
               variants={footerVariants}
             >
               <p className="text-xs font-mono text-muted-foreground/40 tracking-wider uppercase">
-                Resume Matcher &copy; {new Date().getFullYear()}
+                Resume Enhancer &copy; {new Date().getFullYear()}
               </p>
             </motion.div>
           </motion.nav>

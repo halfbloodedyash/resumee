@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@custom-variant dark (&:is(.dark *));
+
 @source "../../../{app,components,hooks,lib,messages}/**/*.{js,ts,jsx,tsx,mdx}";
 
 @theme inline {
@@ -129,67 +131,32 @@
       transform: translateY(0);
     }
   }
-}
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px)
+;
+  --animate-shiny-text: shiny-text 8s infinite;
+  @keyframes shiny-text {
+  0%, 90%, 100% {
+    background-position: calc(-100% - var(--shiny-width)) 0;}
+  30%, 60% {
+    background-position: calc(100% + var(--shiny-width)) 0;}}
+  --animate-line-shadow: line-shadow 15s linear infinite;
+  @keyframes line-shadow {
+  0% {
+    background-position: 0 0;}
+  100% {
+    background-position: 100% -100%;}}}
 
 /* ============================================
    CLAUDE THEME — Dark-first warm palette
    ============================================ */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   --font-mono: 'Geist Mono', monospace;
   --font-sans: 'Geist', sans-serif;
-  --radius: 0.75rem;
+  --radius: 0.625rem;
 
-  /* Dark palette (default) — warm darks inspired by Claude */
-  --background: #1a1714;
-  --foreground: #ece5db;
-
-  --card: #231f1b;
-  --card-foreground: #ece5db;
-
-  --popover: #231f1b;
-  --popover-foreground: #ece5db;
-
-  --primary: #d4a574;
-  --primary-foreground: #1a1714;
-
-  --secondary: #2a2521;
-  --secondary-foreground: #d4c8b8;
-
-  --muted: #2a2521;
-  --muted-foreground: #9b8f82;
-
-  --accent: #342e29;
-  --accent-foreground: #ece5db;
-
-  --destructive: #e54d2e;
-  --destructive-foreground: #ffffff;
-
-  --border: #342e29;
-  --input: #2a2521;
-  --ring: #d4a574;
-
-  --chart-1: #d4a574;
-  --chart-2: #6aab73;
-  --chart-3: #e8985e;
-  --chart-4: #e54d2e;
-  --chart-5: #ece5db;
-
-  --sidebar: #1e1b17;
-  --sidebar-foreground: #ece5db;
-  --sidebar-primary: #d4a574;
-  --sidebar-primary-foreground: #1a1714;
-  --sidebar-accent: #2a2521;
-  --sidebar-accent-foreground: #ece5db;
-  --sidebar-border: #342e29;
-  --sidebar-ring: #d4a574;
-}
-
-/* Light palette */
-.light {
-  color-scheme: light;
-  --background: #faf9f6;
-  --foreground: #1c1917;
+  /* Light palette (default) — warm light */
 
   --card: #ffffff;
   --card-foreground: #1c1917;
@@ -230,6 +197,8 @@
   --sidebar-accent-foreground: #1c1917;
   --sidebar-border: #e7e0d6;
   --sidebar-ring: #c4704b;
+  --background: #faf9f6;
+  --foreground: #1c1917;
 }
 
 @layer base {
@@ -241,6 +210,7 @@
     transition:
       background-color var(--transition-base),
       color var(--transition-base);
+    @apply bg-background text-foreground;
   }
   button {
     font-family: var(--font-sans);
@@ -386,3 +356,42 @@
    OVERLAY MENU — Minimal portal styles
    ============================================ */
 /* (All styling now handled by Tailwind in the component) */
+
+.dark {
+  color-scheme: dark;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+::view-transition-old(root), ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;}

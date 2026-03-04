@@ -43,7 +43,7 @@ export default function OurWorkPage() {
         </h1>
         <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
           We build tools that make resume crafting faster, smarter, and more effective. Here&apos;s
-          what powers Resume Matcher.
+          what powers Resume Enhancer.
         </p>
 
         <div className="mt-12 space-y-4">

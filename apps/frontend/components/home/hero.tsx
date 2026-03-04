@@ -9,11 +9,12 @@ import {
   Settings,
   Zap,
   Target,
-  Sun,
-  Moon,
 } from 'lucide-react';
 import { useTranslations } from '@/lib/i18n';
-import { useTheme } from '@/components/common/theme-provider';
+import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler';
+import { AnimatedShinyText } from '@/components/ui/animated-shiny-text';
+import { LineShadowText } from '@/components/ui/line-shadow-text';
+import { Highlighter } from '@/components/ui/highlighter';
 
 /* ------------------------------------------------------------------ */
 /*  Animated counter hook                                              */
@@ -72,7 +73,6 @@ function useInView(threshold = 0.15) {
 /* ------------------------------------------------------------------ */
 export default function Hero() {
   const { t } = useTranslations();
-  const { theme, toggleTheme } = useTheme();
 
   /* Mouse-tracking glow */
   const heroRef = useRef<HTMLElement>(null);
@@ -150,42 +150,32 @@ export default function Hero() {
       {/* ---- Top nav ---- */}
       <nav className="relative z-20 flex items-center justify-between px-6 py-4 md:px-12 md:py-6 max-w-7xl mx-auto">
         <span className="text-base font-bold tracking-tight text-foreground select-none">
-          Resume&thinsp;Matcher
+          Resume&thinsp;Enhancer
         </span>
-        <button
-          onClick={toggleTheme}
+        <AnimatedThemeToggler
           className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/60 text-muted-foreground transition-all duration-300 hover:bg-primary/10 hover:text-primary hover:border-primary/40 hover:scale-110 active:scale-95"
-          aria-label="Toggle theme"
-        >
-          {theme === 'dark' ? (
-            <Sun className="h-4 w-4" />
-          ) : (
-            <Moon className="h-4 w-4" />
-          )}
-        </button>
+        />
       </nav>
 
       {/* ---- Hero content ---- */}
       <div className="relative z-10 flex flex-col items-center justify-center px-6 pt-12 pb-16 md:pt-20 md:pb-24 max-w-5xl mx-auto text-center">
         {/* Animated pill badge */}
         <div
-          className="inline-flex items-center gap-2 rounded-full border border-primary/20 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-primary mb-10 backdrop-blur-sm"
+          className="inline-flex items-center gap-2 rounded-full border border-primary/20 px-5 py-2 mb-10 backdrop-blur-sm"
           style={{
             opacity: reveal ? 1 : 0,
             transform: reveal ? 'translateY(0)' : 'translateY(16px)',
             transition: 'all 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
-            background:
-              'linear-gradient(90deg, var(--primary) 0%, transparent 40%, transparent 60%, var(--primary) 100%)',
-            backgroundSize: '200% 100%',
-            WebkitBackgroundClip: 'padding-box',
             backgroundColor: 'color-mix(in srgb, var(--primary) 8%, transparent)',
           }}
         >
-          <Sparkles className="h-3.5 w-3.5 animate-pulse" />
-          AI-Powered Resume Builder
+          <Sparkles className="h-3.5 w-3.5 animate-pulse text-primary" />
+          <AnimatedShinyText className="text-xs font-semibold uppercase tracking-widest">
+            AI-Powered Resume Builder
+          </AnimatedShinyText>
         </div>
 
-        {/* Main headline — reveal animation */}
+        {/* Main headline — LineShadowText */}
         <h1 className="relative">
           <span
             className="block text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tighter leading-[1.05] text-foreground"
@@ -198,10 +188,15 @@ export default function Hero() {
               transition: 'all 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s',
             }}
           >
-            {t('home.brandLine1')}
+            <LineShadowText
+              shadowColor="hsl(var(--primary))"
+              className="italic"
+            >
+              {t('home.brandLine1')}
+            </LineShadowText>
           </span>
           <span
-            className="block mt-2 text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tighter leading-[1.05]"
+            className="block mt-2 text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tighter leading-[1.05] text-primary"
             style={{
               opacity: reveal ? 1 : 0,
               transform: reveal
@@ -209,20 +204,18 @@ export default function Hero() {
                 : 'translateY(30px) rotateX(12deg)',
               filter: reveal ? 'blur(0)' : 'blur(8px)',
               transition: 'all 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s',
-              background:
-                'linear-gradient(135deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, var(--foreground)) 50%, var(--primary) 100%)',
-              backgroundSize: '200% auto',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              animation: 'shimmer 4s ease-in-out infinite',
             }}
           >
-            {t('home.brandLine2')}
+            <LineShadowText
+              shadowColor="hsl(var(--foreground))"
+              className="italic"
+            >
+              {t('home.brandLine2')}
+            </LineShadowText>
           </span>
         </h1>
 
-        {/* Subtitle */}
+        {/* Subtitle — Highlighter */}
         <p
           className="mt-8 text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed font-light"
           style={{
@@ -231,7 +224,15 @@ export default function Hero() {
             transition: 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s',
           }}
         >
-          {t('dashboard.subtitle')}
+          <Highlighter
+            action="highlight"
+            color="hsl(var(--primary) / 0.15)"
+            strokeWidth={2}
+            animationDuration={800}
+            isView
+          >
+            {t('dashboard.subtitle')}
+          </Highlighter>
         </p>
 
         {/* CTAs */}

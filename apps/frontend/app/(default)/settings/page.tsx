@@ -1050,7 +1050,7 @@ export default function SettingsPage() {
           <div className="flex items-center gap-2">
             <Image
               src="/logo.svg"
-              alt="Resume Matcher"
+              alt="Resume Enhancer"
               width={20}
               height={20}
               className="w-5 h-5"

@@ -19,7 +19,7 @@ export default function AboutUsPage() {
           About Us
         </h1>
         <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-          Resume Matcher is an AI-powered platform that helps job seekers craft tailored,
+          Resume Enhancer is an AI-powered platform that helps job seekers craft tailored,
           ATS-friendly resumes. We combine modern design with intelligent content optimization to
           give you the best chance at landing your dream role.
         </p>
