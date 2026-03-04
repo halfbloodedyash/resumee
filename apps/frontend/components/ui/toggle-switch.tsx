@@ -1,0 +1,69 @@
+'use client';
+
+import * as React from 'react';
+import { cn } from '@/lib/utils';
+
+export interface ToggleSwitchProps {
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+  label: string;
+  description?: string;
+  disabled?: boolean;
+  className?: string;
+}
+
+export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
+  checked,
+  onCheckedChange,
+  label,
+  description,
+  disabled = false,
+  className,
+}) => {
+  const labelId = React.useId();
+
+  const handleToggle = () => {
+    if (!disabled) {
+      onCheckedChange(!checked);
+    }
+  };
+
+  return (
+    <div
+      className={cn(
+        'flex items-center justify-between rounded-xl border border-border bg-card p-4',
+        disabled && 'opacity-50 cursor-not-allowed',
+        className
+      )}
+    >
+      <div className="flex-1 mr-4">
+        <div id={labelId} className="text-sm font-medium text-card-foreground">
+          {label}
+        </div>
+        {description && <div className="text-xs text-muted-foreground mt-1">{description}</div>}
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        aria-labelledby={labelId}
+        disabled={disabled}
+        onClick={handleToggle}
+        className={cn(
+          'relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border border-border transition-colors duration-200',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+          'disabled:cursor-not-allowed',
+          checked ? 'bg-primary' : 'bg-muted'
+        )}
+      >
+        <span
+          className={cn(
+            'pointer-events-none block h-4 w-4 rounded-full bg-white shadow-sm',
+            'transition-transform duration-200',
+            checked ? 'translate-x-5' : 'translate-x-1'
+          )}
+        />
+      </button>
+    </div>
+  );
+};

@@ -1,0 +1,388 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@source "../../../{app,components,hooks,lib,messages}/**/*.{js,ts,jsx,tsx,mdx}";
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Claude Theme Tokens */
+  --color-canvas: var(--background);
+  --color-ink: var(--foreground);
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+
+  /* Warm shadows */
+  --shadow-xs: 0 1px 2px rgba(28, 25, 23, 0.04);
+  --shadow-sm: 0 1px 3px rgba(28, 25, 23, 0.06), 0 1px 2px rgba(28, 25, 23, 0.04);
+  --shadow-DEFAULT: 0 4px 6px -1px rgba(28, 25, 23, 0.07), 0 2px 4px -2px rgba(28, 25, 23, 0.05);
+  --shadow-md: 0 6px 12px -2px rgba(28, 25, 23, 0.08), 0 3px 7px -3px rgba(28, 25, 23, 0.06);
+  --shadow-lg: 0 12px 24px -4px rgba(28, 25, 23, 0.1), 0 4px 8px -4px rgba(28, 25, 23, 0.06);
+  --shadow-xl: 0 20px 40px -6px rgba(28, 25, 23, 0.12), 0 8px 16px -8px rgba(28, 25, 23, 0.08);
+
+  /* Fonts */
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', 'Fira Code', monospace;
+
+  /* Transition tokens */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Animations */
+  --animate-gradient: gradient 8s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-delayed: float 8s ease-in-out 2s infinite;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s ease-in-out infinite;
+  --animate-text-reveal: text-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-spin-slow: spin 20s linear infinite;
+
+  @keyframes gradient {
+    to {
+      background-position: 200% center;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-20px) scale(1.05);
+    }
+  }
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 0.4;
+      filter: blur(60px);
+    }
+    50% {
+      opacity: 0.8;
+      filter: blur(80px);
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+  @keyframes text-reveal {
+    0% {
+      opacity: 0;
+      transform: translateY(30px) rotateX(20deg);
+      filter: blur(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) rotateX(0deg);
+      filter: blur(0);
+    }
+  }
+  @keyframes fade-up {
+    0% {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ============================================
+   CLAUDE THEME — Dark-first warm palette
+   ============================================ */
+:root {
+  color-scheme: dark;
+  --font-mono: 'Geist Mono', monospace;
+  --font-sans: 'Geist', sans-serif;
+  --radius: 0.75rem;
+
+  /* Dark palette (default) — warm darks inspired by Claude */
+  --background: #1a1714;
+  --foreground: #ece5db;
+
+  --card: #231f1b;
+  --card-foreground: #ece5db;
+
+  --popover: #231f1b;
+  --popover-foreground: #ece5db;
+
+  --primary: #d4a574;
+  --primary-foreground: #1a1714;
+
+  --secondary: #2a2521;
+  --secondary-foreground: #d4c8b8;
+
+  --muted: #2a2521;
+  --muted-foreground: #9b8f82;
+
+  --accent: #342e29;
+  --accent-foreground: #ece5db;
+
+  --destructive: #e54d2e;
+  --destructive-foreground: #ffffff;
+
+  --border: #342e29;
+  --input: #2a2521;
+  --ring: #d4a574;
+
+  --chart-1: #d4a574;
+  --chart-2: #6aab73;
+  --chart-3: #e8985e;
+  --chart-4: #e54d2e;
+  --chart-5: #ece5db;
+
+  --sidebar: #1e1b17;
+  --sidebar-foreground: #ece5db;
+  --sidebar-primary: #d4a574;
+  --sidebar-primary-foreground: #1a1714;
+  --sidebar-accent: #2a2521;
+  --sidebar-accent-foreground: #ece5db;
+  --sidebar-border: #342e29;
+  --sidebar-ring: #d4a574;
+}
+
+/* Light palette */
+.light {
+  color-scheme: light;
+  --background: #faf9f6;
+  --foreground: #1c1917;
+
+  --card: #ffffff;
+  --card-foreground: #1c1917;
+
+  --popover: #ffffff;
+  --popover-foreground: #1c1917;
+
+  --primary: #c4704b;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f5f0eb;
+  --secondary-foreground: #44403c;
+
+  --muted: #f5f0eb;
+  --muted-foreground: #78716c;
+
+  --accent: #ece5db;
+  --accent-foreground: #1c1917;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  --border: #e7e0d6;
+  --input: #ffffff;
+  --ring: #c4704b;
+
+  --chart-1: #c4704b;
+  --chart-2: #16a34a;
+  --chart-3: #d97706;
+  --chart-4: #dc2626;
+  --chart-5: #1c1917;
+
+  --sidebar: #f5f0eb;
+  --sidebar-foreground: #1c1917;
+  --sidebar-primary: #c4704b;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ece5db;
+  --sidebar-accent-foreground: #1c1917;
+  --sidebar-border: #e7e0d6;
+  --sidebar-ring: #c4704b;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    transition:
+      background-color var(--transition-base),
+      color var(--transition-base);
+  }
+  button {
+    font-family: var(--font-sans);
+  }
+}
+
+@media print {
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .resume-print,
+  .resume-print *,
+  .cover-letter-print,
+  .cover-letter-print * {
+    visibility: visible !important;
+  }
+
+  .resume-print,
+  .cover-letter-print {
+    width: 100% !important;
+    max-width: 210mm !important;
+    min-height: 0 !important;
+    position: static !important;
+    margin: 0 auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+
+  .resume-body {
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+
+  .resume-scale {
+    transform: none !important;
+    scale: 1 !important;
+  }
+
+  a {
+    color: #000000 !important;
+    text-decoration: none !important;
+  }
+}
+
+/* ============================================
+   PAGE BREAK CONTROL
+   Prevents individual items from being split
+   across pages during PDF generation.
+   NOTE: Sections CAN span pages - only individual
+   items (job entries, project entries) stay together.
+   ============================================ */
+
+/* Individual items should stay together (job entries, projects, etc.) */
+.resume-body .resume-item {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* Section titles should not be orphaned at bottom of page */
+.resume-body .resume-section-title,
+.resume-body .resume-section-title-sm {
+  break-after: avoid;
+  page-break-after: avoid;
+  /* Ensure at least 3 lines of content follow the header before a page break */
+  orphans: 3;
+  widows: 3;
+}
+
+/* Keep section header together with its first item */
+.resume-body .resume-section {
+  break-inside: auto; /* Allow sections to span pages */
+}
+
+/* Ensure the header + first content element stay together */
+.resume-body .resume-section-title + .resume-items > *:first-child,
+.resume-body .resume-section-title-sm + .resume-items > *:first-child,
+.resume-body .resume-section-title + p,
+.resume-body .resume-section-title-sm + p,
+.resume-body .resume-section-title + ul,
+.resume-body .resume-section-title-sm + ul,
+.resume-body .resume-section-title + .resume-item,
+.resume-body .resume-section-title-sm + .resume-item {
+  break-before: avoid;
+  page-break-before: avoid;
+}
+
+/* Generic no-break class for any element */
+.resume-body [data-no-break] {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* Print-specific overrides for resume templates */
+@media print {
+  .resume-body {
+    padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left) !important;
+  }
+
+  .resume-body .resume-section-title,
+  .resume-body .resume-section-title-sm {
+    border-bottom-color: #9ca3af !important;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  /* Reinforce page break rules in print - only for individual items */
+  .resume-body .resume-item {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Keep section header with first content in print */
+  .resume-body .resume-section-title + .resume-items > *:first-child,
+  .resume-body .resume-section-title-sm + .resume-items > *:first-child,
+  .resume-body .resume-section-title + p,
+  .resume-body .resume-section-title-sm + p,
+  .resume-body .resume-section-title + ul,
+  .resume-body .resume-section-title-sm + ul,
+  .resume-body .resume-section-title + .resume-item,
+  .resume-body .resume-section-title-sm + .resume-item {
+    break-before: avoid !important;
+    page-break-before: avoid !important;
+  }
+}
+
+/* ============================================
+   STERLING GATE KINETIC NAVIGATION
+   Scoped to avoid global theme collisions.
+   ============================================ */
+/* ============================================
+   OVERLAY MENU — Minimal portal styles
+   ============================================ */
+/* (All styling now handled by Tailwind in the component) */
