@@ -3,25 +3,19 @@
 set -o errexit
 
 pip install --upgrade pip
+
+# Prevent Playwright from auto-downloading browsers during pip install
+# (the post-install hook tries su root which fails on Render)
+export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+
 pip install -r requirements.txt
 
-# Install Chromium for Playwright PDF rendering
-# Playwright tries to su root for system deps which fails on Render
-# so we install system deps via apt first, then browser binary only
-echo "==> Installing Playwright system dependencies..."
-if command -v apt-get &> /dev/null; then
-  apt-get update -qq && apt-get install -y -qq \
-    libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
-    libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 \
-    libpango-1.0-0 libcairo2 libasound2 libxshmfence1 \
-    2>/dev/null || echo "Warning: Some system deps may be missing"
-fi
-
-echo "==> Installing Playwright Chromium browser..."
+# Manually install just the Chromium binary (no system deps, no su root)
+echo "==> Installing Chromium browser for PDF export..."
 export PLAYWRIGHT_BROWSERS_PATH=/opt/render/project/.playwright
-npx --yes playwright install chromium 2>/dev/null \
-  || python -m playwright install chromium 2>/dev/null \
-  || echo "Warning: Playwright browser install failed. PDF export will be disabled."
+python -m playwright install chromium 2>&1 || echo "Warning: Chromium install failed. PDF export will be disabled."
 
 # Ensure data directory exists
 mkdir -p data
+
+echo "==> Build complete!"
