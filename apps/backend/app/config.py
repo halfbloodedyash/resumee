@@ -163,39 +163,33 @@ class Settings(BaseSettings):
             raise ValueError(f"Invalid LOG_LEVEL: {value}. Allowed: {ALLOWED_LOG_LEVELS}")
         return value
 
-    # CORS Configuration
-    cors_origins: list[str] = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ]
+    # CORS Configuration — accepts JSON array string, comma-separated, or plain URL
+    cors_origins: str = '["http://localhost:3000","http://127.0.0.1:3000"]'
 
-    @field_validator("cors_origins", mode="before")
-    @classmethod
-    def parse_cors_origins(cls, v: Any) -> list[str]:
-        """Parse CORS origins from env var string or list.
+    @property
+    def cors_origins_list(self) -> list[str]:
+        """Parse cors_origins string into a list of origins.
 
         Handles:
-        - Already a list → pass through
         - JSON array string → parse it
         - Comma-separated string → split
-        - Empty / blank string → return default
+        - Single URL string → wrap in list
+        - Empty / blank → return defaults
         """
         default = ["http://localhost:3000", "http://127.0.0.1:3000"]
-        if isinstance(v, list):
-            return v
-        if not v or (isinstance(v, str) and not v.strip()):
+        s = self.cors_origins.strip() if self.cors_origins else ""
+        if not s:
             return default
-        s = str(v).strip()
         # Try JSON first
         if s.startswith("["):
             try:
                 parsed = json.loads(s)
                 if isinstance(parsed, list):
-                    return [str(item) for item in parsed]
+                    return [str(item).rstrip("/") for item in parsed]
             except json.JSONDecodeError:
                 pass
-        # Fall back to comma-separated
-        return [origin.strip() for origin in s.split(",") if origin.strip()]
+        # Fall back to comma-separated (also handles single URL)
+        return [origin.strip().rstrip("/") for origin in s.split(",") if origin.strip()]
 
     # Paths — on Vercel (read-only fs), default to /tmp/data
     data_dir: Path = (
