@@ -249,7 +249,7 @@ def get_llm_config() -> LLMConfig:
     return LLMConfig(
         provider=stored.get("provider", settings.llm_provider),
         model=stored.get("model", settings.llm_model),
-        api_key=stored.get("api_key", settings.llm_api_key),
+        api_key=stored.get("api_key", "") or settings.get_effective_api_key(),
         api_base=stored.get("api_base", settings.llm_api_base),
     )
 

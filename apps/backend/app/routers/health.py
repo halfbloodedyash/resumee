@@ -33,9 +33,11 @@ async def get_status() -> StatusResponse:
     llm_status = await check_llm_health(config)
     db_stats = db.get_stats()
 
+    llm_configured = bool(config.api_key) or config.provider == "ollama"
+
     return StatusResponse(
-        status="ready" if llm_status["healthy"] and db_stats["has_master_resume"] else "setup_required",
-        llm_configured=bool(config.api_key) or config.provider == "ollama",
+        status="ready" if llm_configured else "setup_required",
+        llm_configured=llm_configured,
         llm_healthy=llm_status["healthy"],
         has_master_resume=db_stats["has_master_resume"],
         database_stats=db_stats,
