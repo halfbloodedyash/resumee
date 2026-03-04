@@ -1,6 +1,7 @@
 """Application configuration using pydantic-settings."""
 
 import json
+import os
 from pathlib import Path
 from typing import Any, Literal
 
@@ -118,6 +119,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore",
+        env_ignore_empty=True,
     )
 
     # LLM Configuration
@@ -167,8 +169,40 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
     ]
 
-    # Paths
-    data_dir: Path = Path(__file__).parent.parent / "data"
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, v: Any) -> list[str]:
+        """Parse CORS origins from env var string or list.
+
+        Handles:
+        - Already a list → pass through
+        - JSON array string → parse it
+        - Comma-separated string → split
+        - Empty / blank string → return default
+        """
+        default = ["http://localhost:3000", "http://127.0.0.1:3000"]
+        if isinstance(v, list):
+            return v
+        if not v or (isinstance(v, str) and not v.strip()):
+            return default
+        s = str(v).strip()
+        # Try JSON first
+        if s.startswith("["):
+            try:
+                parsed = json.loads(s)
+                if isinstance(parsed, list):
+                    return [str(item) for item in parsed]
+            except json.JSONDecodeError:
+                pass
+        # Fall back to comma-separated
+        return [origin.strip() for origin in s.split(",") if origin.strip()]
+
+    # Paths — on Vercel (read-only fs), default to /tmp/data
+    data_dir: Path = (
+        Path("/tmp/data")
+        if os.environ.get("VERCEL")
+        else Path(__file__).parent.parent / "data"
+    )
 
     @property
     def db_path(self) -> Path:

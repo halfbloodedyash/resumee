@@ -3,18 +3,33 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import os
 import sys
 from pathlib import Path
-from typing import Awaitable, NoReturn, Optional
+from typing import TYPE_CHECKING, Awaitable, NoReturn, Optional
 
-from playwright.async_api import (
-    Browser,
-    Error as PlaywrightError,
-    Page,
-    Playwright,
-    async_playwright,
-)
+# Lazy-import Playwright so the app can boot in environments where
+# Playwright / Chromium is not available (e.g. Vercel serverless).
+try:
+    from playwright.async_api import (
+        Browser,
+        Error as PlaywrightError,
+        Page,
+        Playwright,
+        async_playwright,
+    )
+
+    _PLAYWRIGHT_AVAILABLE = True
+except ImportError:
+    _PLAYWRIGHT_AVAILABLE = False
+    Browser = None  # type: ignore[assignment,misc]
+    PlaywrightError = Exception  # type: ignore[assignment,misc]
+    Page = None  # type: ignore[assignment,misc]
+    Playwright = None  # type: ignore[assignment,misc]
+    async_playwright = None  # type: ignore[assignment]
+
+logger = logging.getLogger(__name__)
 
 
 class PDFRenderError(Exception):
@@ -37,6 +52,10 @@ async def init_pdf_renderer() -> None:
     concurrent requests try to initialize the browser simultaneously.
     """
     global _playwright, _browser
+
+    if not _PLAYWRIGHT_AVAILABLE:
+        logger.warning("Playwright is not installed — PDF rendering is disabled.")
+        return
 
     # Fast path: already initialized
     if _browser is not None:
@@ -240,6 +259,8 @@ def _loop_supports_subprocess() -> bool:
 async def close_pdf_renderer() -> None:
     """Close the Playwright browser instance."""
     global _playwright, _browser
+    if not _PLAYWRIGHT_AVAILABLE:
+        return
     async with _init_lock:
         if _browser is not None:
             await _browser.close()
@@ -268,6 +289,11 @@ async def render_resume_pdf(
         on every page (not just the first page like HTML padding would).
     """
     global _subprocess_supported
+
+    if not _PLAYWRIGHT_AVAILABLE:
+        raise PDFRenderError(
+            "PDF rendering is unavailable: Playwright is not installed in this environment."
+        )
 
     pdf_format = _resolve_pdf_format(page_size)
     pdf_margins = _resolve_pdf_margins(margins)
