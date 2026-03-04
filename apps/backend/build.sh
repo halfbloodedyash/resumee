@@ -6,7 +6,12 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 # Install Chromium for Playwright PDF rendering
-playwright install --with-deps chromium
+# Use --with-deps only if we have root/sudo, otherwise install browser only
+if command -v sudo &> /dev/null; then
+  sudo playwright install --with-deps chromium
+else
+  playwright install chromium
+fi
 
 # Ensure data directory exists
 mkdir -p data
