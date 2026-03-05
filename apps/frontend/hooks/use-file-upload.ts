@@ -226,9 +226,23 @@ export const useFileUpload = (
       markUploadStarted();
 
       try {
+        // Get auth token for authenticated uploads
+        const headers: Record<string, string> = {};
+        try {
+          const { getSupabaseBrowserClient } = await import('@/lib/supabase');
+          const supabase = getSupabaseBrowserClient();
+          const { data } = await supabase.auth.getSession();
+          if (data.session?.access_token) {
+            headers['Authorization'] = `Bearer ${data.session.access_token}`;
+          }
+        } catch {
+          // Continue without auth if session fetch fails
+        }
+
         const response = await fetch(uploadUrl, {
           method: 'POST',
           body: formData,
+          headers,
         });
 
         let responseData: Record<string, unknown> = {}; // Initialize for broader scope
