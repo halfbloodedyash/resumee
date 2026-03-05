@@ -16,7 +16,6 @@ import {
   Loader2,
   ArrowLeft,
   AlertTriangle,
-  Settings,
   CheckCircle2,
   XCircle,
   ArrowRight,
@@ -524,8 +523,6 @@ export default function JDAnalysisPage() {
     incrementResumes,
   } = useStatusCache();
 
-  const isLlmConfigured = !statusLoading && systemStatus?.llm_configured;
-
   useEffect(() => {
     const storedId = localStorage.getItem('master_resume_id');
     setMasterResumeId(storedId);
@@ -861,29 +858,6 @@ export default function JDAnalysisPage() {
               </p>
             </div>
 
-            {/* LLM Not Configured Warning */}
-            {!statusLoading && !isLlmConfigured && (
-              <div className="mb-6 border border-amber-500 bg-amber-50 p-4 shadow-sm">
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-sm font-bold text-amber-800">
-                      {t('jdAnalysis.setupRequiredTitle')}
-                    </p>
-                    <p className="text-xs text-amber-700 mt-1">{t('jdAnalysis.noApiKeyMessage')}</p>
-                    <Link
-                      href="/settings"
-                      className="inline-flex items-center gap-2 mt-3 text-amber-700 hover:text-amber-900 transition-colors"
-                    >
-                      <Settings className="w-4 h-4" />
-                      <span className="text-xs font-bold underline">
-                        {t('jdAnalysis.configureApiKey')}
-                      </span>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            )}
 
             <div className="space-y-6">
               {/* Input mode tabs */}
@@ -1035,7 +1009,7 @@ export default function JDAnalysisPage() {
               <Button
                 size="lg"
                 onClick={handleAnalyze}
-                disabled={isLoading || statusLoading || !jobDescription.trim() || !isLlmConfigured}
+                disabled={isLoading || statusLoading || !jobDescription.trim()}
                 className="w-full"
               >
                 {isLoading ? (
@@ -1048,8 +1022,6 @@ export default function JDAnalysisPage() {
                     <Loader2 className="w-5 h-5 animate-spin" />
                     {t('common.checking')}
                   </>
-                ) : !isLlmConfigured ? (
-                  t('jdAnalysis.configureApiKeyFirst')
                 ) : (
                   <>
                     <Target className="w-5 h-5" />

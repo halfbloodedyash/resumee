@@ -17,8 +17,6 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import Plus from 'lucide-react/dist/esm/icons/plus';
-import Settings from 'lucide-react/dist/esm/icons/settings';
-import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import FileSearch from 'lucide-react/dist/esm/icons/file-search';
 
 import {
@@ -315,34 +313,7 @@ export default function DashboardPage() {
       <SwissGrid>
         {/* 1. Master Resume Logic */}
         {!masterResumeId ? (
-          // LLM Not Configured or Upload State
-          !isLlmConfigured && !statusLoading ? (
-            <Link href="/settings" className="block h-full">
-              <Card
-                variant="interactive"
-                className="aspect-square h-full border-dashed border-amber-500/30 bg-amber-500/10"
-              >
-                <div className="flex-1 flex flex-col justify-between">
-                  <div className="w-12 h-12 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
-                    <AlertTriangle className="w-6 h-6 text-amber-500" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-base text-amber-400 mb-2">
-                      {t('dashboard.setupRequiredTitle')}
-                    </CardTitle>
-                    <CardDescription className="text-amber-500/70 text-xs">
-                      {t('dashboard.setupRequiredMessage')}
-                    </CardDescription>
-                    <div className="flex items-center gap-2 mt-4 text-amber-500 group-hover:text-amber-400">
-                      <Settings className="w-4 h-4" />
-                      <span className="text-xs font-medium">{t('nav.goToSettings')}</span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </Link>
-          ) : (
-            <ResumeUploadDialog
+          <ResumeUploadDialog
               open={isUploadDialogOpen}
               onOpenChange={setIsUploadDialogOpen}
               onUploadComplete={handleUploadComplete}
@@ -364,7 +335,6 @@ export default function DashboardPage() {
                 </Card>
               }
             />
-          )
         ) : (
           // Master Resume Exists
           <Card

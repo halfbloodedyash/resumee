@@ -34,10 +34,11 @@ async def get_status(user_id: str = Depends(get_user_id)) -> StatusResponse:
     llm_status = await check_llm_health(config)
     db_stats = db.get_stats(user_id)
 
-    llm_configured = bool(config.api_key) or config.provider == "ollama"
+    # API key is managed server-side via environment variables, always configured
+    llm_configured = True
 
     return StatusResponse(
-        status="ready" if llm_configured else "setup_required",
+        status="ready",
         llm_configured=llm_configured,
         llm_healthy=llm_status["healthy"],
         has_master_resume=db_stats["has_master_resume"],

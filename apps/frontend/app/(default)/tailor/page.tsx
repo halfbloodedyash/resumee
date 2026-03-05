@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useResumePreview } from '@/components/common/resume_previewer_context';
@@ -16,7 +15,7 @@ import {
 import { fetchPromptConfig, type PromptOption } from '@/lib/api/config';
 import { Dropdown } from '@/components/ui/dropdown';
 import { useStatusCache } from '@/lib/context/status-cache';
-import { Loader2, ArrowLeft, AlertTriangle, Settings } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import { useTranslations } from '@/lib/i18n';
 import { DiffPreviewModal } from '@/components/tailor/diff-preview-modal';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
@@ -312,25 +311,6 @@ export default function TailorPage() {
           </p>
         </div>
 
-        {/* LLM Not Configured Warning */}
-        {!statusLoading && !isLlmConfigured && (
-          <div className="mb-6 border border-amber-500 bg-amber-50 p-4 shadow-sm">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <p className="text-sm font-bold text-amber-800">{t('tailor.setupRequiredTitle')}</p>
-                <p className="text-xs text-amber-700 mt-1">{t('tailor.noApiKeyMessage')}</p>
-                <Link
-                  href="/settings"
-                  className="inline-flex items-center gap-2 mt-3 text-amber-700 hover:text-amber-900 transition-colors"
-                >
-                  <Settings className="w-4 h-4" />
-                  <span className="text-xs font-bold underline">{t('tailor.configureApiKey')}</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
 
         <div className="space-y-6">
           <Dropdown
@@ -392,7 +372,7 @@ export default function TailorPage() {
           <Button
             size="lg"
             onClick={handleGenerate}
-            disabled={isLoading || statusLoading || !jobDescription.trim() || !isLlmConfigured}
+            disabled={isLoading || statusLoading || !jobDescription.trim()}
             className="w-full"
           >
             {isLoading ? (
@@ -405,8 +385,6 @@ export default function TailorPage() {
                 <Loader2 className="w-5 h-5 animate-spin" />
                 {t('common.checking')}
               </>
-            ) : !isLlmConfigured ? (
-              t('tailor.configureApiKeyFirst')
             ) : (
               t('tailor.generateTailored')
             )}

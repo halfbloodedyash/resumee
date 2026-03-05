@@ -520,23 +520,6 @@ export default function SettingsPage() {
         </div>
 
         <div className="p-8 space-y-10">
-          {/* API Key Not Configured Warning */}
-          {!statusLoading && systemStatus && !systemStatus.llm_configured && (
-            <div className="border border-amber-500 bg-amber-50 p-4 shadow-sm">
-              <div className="flex items-start gap-3">
-                <div className="w-3 h-3 bg-amber-500 mt-1 shrink-0"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-amber-800">
-                    {t('settings.setupRequired.title')}
-                  </p>
-                  <p className="text-xs text-amber-700 mt-1">
-                    {t('settings.setupRequired.description')}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* System Status Panel */}
           <section className="space-y-4">
             <div className="flex items-center justify-between border-b border-border/10 pb-2">
@@ -695,195 +678,6 @@ export default function SettingsPage() {
             )}
           </section>
 
-          {/* LLM Configuration */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-2 border-b border-border/10 pb-2">
-              <Key className="w-4 h-4" />
-              <h2 className="text-sm font-bold">{t('settings.llmConfigurationTitle')}</h2>
-            </div>
-
-            <div className="grid gap-6">
-              {/* Provider Selection */}
-              <div className="space-y-2">
-                <Label>{t('settings.providerLabel')}</Label>
-                <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-                  {PROVIDERS.map((p) => (
-                    <button
-                      key={p}
-                      onClick={() => handleProviderChange(p)}
-                      className={`px-3 py-2 text-xs ${SEGMENTED_BUTTON_BASE} ${
-                        provider === p ? SEGMENTED_BUTTON_ACTIVE : SEGMENTED_BUTTON_INACTIVE
-                      }`}
-                    >
-                      {PROVIDER_INFO[p].name.split(' ')[0]}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {t('settings.llmConfiguration.selectedProvider', {
-                    provider: providerInfo.name,
-                  })}
-                </p>
-              </div>
-
-              {/* Model Input */}
-              <div className="space-y-2">
-                <Label htmlFor="model">{t('settings.llmConfiguration.modelLabel')}</Label>
-                <Input
-                  id="model"
-                  value={model}
-                  onChange={(e) => setModel(e.target.value)}
-                  placeholder={providerInfo.defaultModel}
-                  className="text-sm"
-                />
-                <p className="text-xs text-muted-foreground">
-                  {t('settings.llmConfiguration.defaultModel', {
-                    model: providerInfo.defaultModel,
-                  })}
-                </p>
-              </div>
-
-              {/* API Key Input */}
-              <div className="space-y-2">
-                <Label htmlFor="apiKey">
-                  {t('settings.llmConfiguration.apiKeyLabel')}{' '}
-                  {!requiresApiKey && (
-                    <span className="text-muted-foreground/60">
-                      {t('settings.llmConfiguration.apiKeyOptionalForOllama')}
-                    </span>
-                  )}
-                </Label>
-                <Input
-                  id="apiKey"
-                  type="password"
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder={
-                    requiresApiKey
-                      ? t('settings.llmConfiguration.apiKeyPlaceholder')
-                      : t('settings.llmConfiguration.apiKeyNotRequiredPlaceholder')
-                  }
-                  className="text-sm"
-                  disabled={!requiresApiKey}
-                />
-                {requiresApiKey && hasStoredApiKey && !apiKey && (
-                  <p className="text-xs text-muted-foreground">
-                    {t('settings.llmConfiguration.leaveBlankToKeepExistingKey')}
-                  </p>
-                )}
-              </div>
-
-              {/* API Base URL (optional, for proxies/aggregators/custom endpoints) */}
-              <div className="space-y-2">
-                <Label htmlFor="apiBase">{t('settings.llmConfiguration.baseUrlLabel')}</Label>
-                <Input
-                  id="apiBase"
-                  value={apiBase}
-                  onChange={(e) => setApiBase(e.target.value)}
-                  placeholder={t('settings.llmConfiguration.baseUrlPlaceholder')}
-                  className="text-sm"
-                />
-                <p className="text-xs text-muted-foreground">
-                  {t('settings.llmConfiguration.baseUrlDescription')}
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-4">
-                <Button
-                  onClick={handleSave}
-                  disabled={status === 'saving' || status === 'loading'}
-                  className="flex-1"
-                >
-                  {status === 'saving' ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : status === 'saved' ? (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      {t('common.success')}
-                    </>
-                  ) : (
-                    <>
-                      <Save className="w-4 h-4" />
-                      {t('common.save')}
-                    </>
-                  )}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleTestConnection}
-                  disabled={status === 'testing' || status === 'saving'}
-                >
-                  {status === 'testing' ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <>
-                      <Activity className="w-4 h-4" />
-                      {t('settings.llmConfiguration.testConnection')}
-                    </>
-                  )}
-                </Button>
-              </div>
-
-              {/* Error Message */}
-              {error && (
-                <div className="border border-red-300 bg-red-50 p-3">
-                  <p className="text-xs text-red-600">
-                    {t('settings.llmConfiguration.errorPrefix', { error })}
-                  </p>
-                </div>
-              )}
-
-              {/* Health Check Result */}
-              {healthCheck && (
-                <div
-                  className={`border p-4 ${
-                    healthCheck.healthy
-                      ? 'border-green-300 bg-green-50'
-                      : 'border-red-300 bg-red-50'
-                  }`}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    {healthCheck.healthy ? (
-                      <CheckCircle2 className="w-5 h-5 text-green-600" />
-                    ) : (
-                      <XCircle className="w-5 h-5 text-red-500" />
-                    )}
-                    <span className="text-sm font-bold">
-                      {healthCheck.healthy
-                        ? t('settings.llmConfiguration.connectionSuccessful')
-                        : t('settings.llmConfiguration.connectionFailed')}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {t('settings.llmConfiguration.connectionDetails', {
-                      provider: healthCheck.provider,
-                      model: healthCheck.model,
-                    })}
-                  </p>
-                  {healthCheckError && (
-                    <p className="text-xs text-red-600 mt-1">{healthCheckError}</p>
-                  )}
-                  {healthCheckWarning && (
-                    <p className="text-xs text-amber-700 mt-1">{healthCheckWarning}</p>
-                  )}
-                  {healthDetailItems.length > 0 && (
-                    <div className="mt-3 space-y-3">
-                      {healthDetailItems.map((item) => (
-                        <div key={item.key}>
-                          <p className="text-[10px] text-muted-foreground">{item.label}</p>
-                          <pre className="mt-1 whitespace-pre-wrap rounded-lg border border-border bg-card p-3 text-xs text-foreground shadow-sm">
-                            {item.value}
-                          </pre>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </section>
-
           {/* Content Generation Section */}
           <section className="space-y-6">
             <div className="flex items-center gap-2 border-b border-border/10 pb-2">
@@ -1003,26 +797,7 @@ export default function SettingsPage() {
               <h2 className="text-sm font-bold text-red-600">{t('settings.dangerZone')}</h2>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Clear API Keys */}
-              <div className="border border-red-200 bg-red-50/50 p-6 space-y-4">
-                <div>
-                  <h3 className="font-bold text-sm text-red-900 mb-1">
-                    {t('settings.clearApiKeys')}
-                  </h3>
-                  <p className="text-xs text-red-700">{t('settings.clearApiKeysDescription')}</p>
-                </div>
-                <Button
-                  variant="outline"
-                  className="w-full border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800 hover:border-red-300"
-                  onClick={() => setShowClearApiKeysDialog(true)}
-                  disabled={isResetting}
-                >
-                  <Key className="w-4 h-4 mr-2" />
-                  {t('settings.clearApiKeys')}
-                </Button>
-              </div>
-
+            <div className="grid md:grid-cols-1 gap-6">
               {/* Reset Database */}
               <div className="border border-red-200 bg-red-50/50 p-6 space-y-4">
                 <div>
@@ -1069,15 +844,9 @@ export default function SettingsPage() {
               </>
             ) : systemStatus ? (
               <>
-                <div
-                  className={`w-3 h-3 ${systemStatus.status === 'ready' ? 'bg-green-700' : 'bg-amber-500'}`}
-                ></div>
-                <span
-                  className={`text-xs font-bold ${systemStatus.status === 'ready' ? 'text-green-700' : 'text-amber-600'}`}
-                >
-                  {systemStatus.status === 'ready'
-                    ? t('settings.footer.status.ready')
-                    : t('settings.footer.status.setupRequired')}
+                <div className="w-3 h-3 bg-green-700"></div>
+                <span className="text-xs font-bold text-green-700">
+                  {t('settings.footer.status.ready')}
                 </span>
               </>
             ) : (
@@ -1088,16 +857,6 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
-
-      <ConfirmDialog
-        open={showClearApiKeysDialog}
-        onOpenChange={setShowClearApiKeysDialog}
-        title={t('confirmations.clearApiKeys')}
-        description={t('confirmations.clearApiKeysDescription')}
-        confirmLabel={t('common.delete')}
-        variant="warning"
-        onConfirm={handleClearApiKeys}
-      />
 
       <ConfirmDialog
         open={showResetDatabaseDialog}
