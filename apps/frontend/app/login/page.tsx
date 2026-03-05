@@ -1,5 +1,6 @@
 'use client';
 
+import { CrowdCanvas } from '@/components/login/crowd-canvas';
 import { useAuth } from '@/lib/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -17,26 +18,28 @@ export default function LoginPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="font-mono text-sm">Loading…</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#F0F0E8]">
+        <p className="font-mono text-sm uppercase tracking-wider">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="w-full max-w-sm border border-border p-8 shadow-md rounded-lg">
-        <h1 className="mb-2 text-2xl font-bold tracking-tight">
-          Resume Enhancer
-        </h1>
-        <p className="mb-8 text-sm text-muted-foreground">
-          Sign in to manage your resumes and tailor them to job descriptions.
-        </p>
+    <div className="relative min-h-screen overflow-hidden bg-[#F0F0E8] text-black">
+      <div className="absolute inset-0">
+        <CrowdCanvas
+          src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/open-peeps-sheet.png"
+          rows={15}
+          cols={7}
+        />
+        <div className="absolute inset-0 bg-[#F0F0E8]/30" />
+      </div>
 
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-10">
         <button
           type="button"
           onClick={signInWithGoogle}
-          className="flex w-full items-center justify-center gap-3 border border-border bg-card px-4 py-3 text-sm font-medium rounded-lg transition-colors hover:bg-accent active:bg-muted"
+          className="flex items-center justify-center gap-3 border-2 border-black bg-white px-6 py-4 font-sans text-sm font-semibold transition-all shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
         >
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
             <path
