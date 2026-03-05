@@ -324,7 +324,7 @@ export default function Hero() {
             },
           ].map((card, i) => (
             <Link
-              key={card.href}
+              key={card.title}
               href={card.href}
               className="group relative rounded-2xl border border-border/60 bg-card/50 backdrop-blur-sm p-7 transition-all duration-500 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1 hover:border-primary/30"
               style={{
