@@ -3,6 +3,7 @@
 import { SwissGrid } from '@/components/home/swiss-grid';
 import { ResumeUploadDialog } from '@/components/dashboard/resume-upload-dialog';
 import { SterlingGateKineticNavigation } from '@/components/ui/sterling-gate-kinetic-navigation';
+import { UserMenu } from '@/components/common/user-menu';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -305,7 +306,10 @@ export default function DashboardPage() {
         >
           Resume&thinsp;Matcher
         </Link>
-        <SterlingGateKineticNavigation inline />
+        <div className="flex items-center gap-3">
+          <UserMenu />
+          <SterlingGateKineticNavigation inline />
+        </div>
       </nav>
 
       <SwissGrid>

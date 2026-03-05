@@ -2,8 +2,9 @@
 
 import logging
 
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
+from app.auth import get_user_id
 from app.database import db
 from app.schemas.jd_analysis import JDAnalysisRequest, JDAnalysisResponse
 from app.services.jd_analyzer import analyze_jd
@@ -24,14 +25,14 @@ _JD_MAX_FILE_SIZE = 4 * 1024 * 1024  # 4 MB
 
 
 @router.post("/analyze", response_model=JDAnalysisResponse)
-async def analyze_job_description(request: JDAnalysisRequest) -> JDAnalysisResponse:
+async def analyze_job_description(request: JDAnalysisRequest, user_id: str = Depends(get_user_id)) -> JDAnalysisResponse:
     """Analyze a job description against the user's resume.
 
     Returns ATS score, matching/missing skills & keywords,
     experience gap analysis, and prioritized change recommendations.
     """
     # Fetch the resume
-    resume = db.get_resume(request.resume_id)
+    resume = db.get_resume(request.resume_id, user_id)
     if not resume:
         raise HTTPException(status_code=404, detail="Resume not found")
 

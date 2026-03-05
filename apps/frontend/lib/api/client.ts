@@ -33,7 +33,25 @@ export const API_URL = normalizeApiUrl(process.env.NEXT_PUBLIC_API_URL ?? DEFAUL
 export const API_BASE = resolveRuntimeApiBase(toApiBase(API_URL));
 
 /**
+ * Retrieve the current Supabase access token from the browser client.
+ * Returns null when there is no active session (user signed out / SSR).
+ */
+async function getAccessToken(): Promise<string | null> {
+  if (typeof window === 'undefined') return null;
+  try {
+    // Dynamic import to avoid circular dependencies and SSR issues.
+    const { getSupabaseBrowserClient } = await import('@/lib/supabase');
+    const supabase = getSupabaseBrowserClient();
+    const { data } = await supabase.auth.getSession();
+    return data.session?.access_token ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Standard fetch wrapper with common error handling.
+ * Automatically attaches the Supabase auth token as a Bearer header.
  * Returns the Response object for flexibility.
  */
 export async function apiFetch(endpoint: string, options?: RequestInit): Promise<Response> {
@@ -48,7 +66,14 @@ export async function apiFetch(endpoint: string, options?: RequestInit): Promise
     url = resolveRuntimeApiBase(normalizedEndpoint);
   }
 
-  return fetch(url, options);
+  // Merge auth header into the request
+  const token = await getAccessToken();
+  const headers = new Headers(options?.headers);
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  return fetch(url, { ...options, headers });
 }
 
 /**

@@ -245,7 +245,7 @@ export default function Hero() {
           }}
         >
           <Link
-            href="/dashboard"
+            href="/login"
             className="group relative inline-flex items-center gap-2.5 rounded-xl bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.98]"
           >
             <span className="relative z-10">{t('home.launchApp')}</span>
@@ -254,7 +254,7 @@ export default function Hero() {
             <span className="absolute inset-0 rounded-xl bg-primary opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-40" />
           </Link>
           <Link
-            href="/settings"
+            href="/login"
             className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-card/60 backdrop-blur-sm px-8 py-3.5 text-sm font-semibold text-card-foreground transition-all duration-300 hover:bg-accent hover:border-primary/30 hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98]"
           >
             <Settings className="h-4 w-4" />
@@ -302,21 +302,21 @@ export default function Hero() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             {
-              href: '/dashboard',
+              href: '/login',
               icon: FileText,
               title: t('nav.dashboard'),
               desc: 'Manage and organize all your resumes in one place',
               accent: 'from-primary/20 to-primary/5',
             },
             {
-              href: '/tailor',
+              href: '/login',
               icon: Target,
               title: t('nav.tailor'),
               desc: 'AI-powered tailoring matched to any job description',
               accent: 'from-primary/25 to-primary/5',
             },
             {
-              href: '/builder',
+              href: '/login',
               icon: Zap,
               title: t('nav.builder'),
               desc: 'Build beautiful, professional resumes instantly',
@@ -357,6 +357,17 @@ export default function Hero() {
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* ---- Footer links ---- */}
+      <div className="relative z-10 flex items-center justify-center gap-6 pb-12 text-xs text-muted-foreground">
+        <Link href="/privacy-policy" className="hover:text-foreground transition-colors">
+          Privacy Policy
+        </Link>
+        <span className="text-border">|</span>
+        <Link href="/terms-of-service" className="hover:text-foreground transition-colors">
+          Terms of Service
+        </Link>
       </div>
 
       {/* ---- Bottom fade ---- */}

@@ -5,8 +5,9 @@ import json
 import logging
 from pathlib import Path
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 
+from app.auth import get_user_id
 from app.config import settings
 from app.llm import check_llm_health, LLMConfig
 from app.schemas import (
@@ -469,7 +470,7 @@ async def delete_api_key(provider: str) -> dict:
 
 
 @router.post("/reset")
-async def reset_database_endpoint(request: ResetDatabaseRequest) -> dict:
+async def reset_database_endpoint(request: ResetDatabaseRequest, user_id: str = Depends(get_user_id)) -> dict:
     """Reset the database and clear all data.
 
     WARNING: This action is irreversible. It will:
@@ -493,5 +494,5 @@ async def reset_database_endpoint(request: ResetDatabaseRequest) -> dict:
             status_code=400,
             detail="Confirmation required. Pass confirm=RESET_ALL_DATA in request body.",
         )
-    db.reset_database()
+    db.reset_database(user_id)
     return {"message": "Database and all data have been reset successfully"}
