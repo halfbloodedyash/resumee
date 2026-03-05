@@ -2,6 +2,7 @@
 
 import { CrowdCanvas } from '@/components/login/crowd-canvas';
 import { useAuth } from '@/lib/context/auth-context';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -33,6 +34,31 @@ export default function LoginPage() {
           cols={7}
         />
         <div className="absolute inset-0 bg-[#F0F0E8]/30" />
+      </div>
+
+      {/* Back to home link */}
+      <div className="absolute top-6 left-6 z-20">
+        <Link
+          href="/"
+          className="flex items-center gap-2 border-2 border-black bg-white px-4 py-2 font-sans text-sm font-semibold transition-all shadow-[3px_3px_0px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M19 12H5" />
+            <path d="m12 19-7-7 7-7" />
+          </svg>
+          Home
+        </Link>
       </div>
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-10">
