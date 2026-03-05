@@ -62,11 +62,16 @@ export default function LoginPage() {
       </div>
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-10">
-        <button
-          type="button"
-          onClick={signInWithGoogle}
-          className="flex items-center justify-center gap-3 border-2 border-black bg-white px-6 py-4 font-sans text-sm font-semibold transition-all shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
-        >
+        <div className="flex flex-col items-center gap-6 border-2 border-black bg-white px-10 py-10 shadow-[6px_6px_0px_0px_#000000]">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
+            <p className="mt-1 text-sm text-gray-500">Sign in to continue to your dashboard</p>
+          </div>
+          <button
+            type="button"
+            onClick={signInWithGoogle}
+            className="flex items-center justify-center gap-3 border-2 border-black bg-white px-6 py-4 font-sans text-sm font-semibold transition-all shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+          >
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
             <path
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
@@ -86,7 +91,8 @@ export default function LoginPage() {
             />
           </svg>
           Continue with Google
-        </button>
+          </button>
+        </div>
       </div>
     </div>
   );
